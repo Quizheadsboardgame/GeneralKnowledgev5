@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0CC0DF; /* Background color updated */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 40%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Added shadow */
+            padding: 20px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 5px solid #0CC0DF; /* Outer blue border color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .qa-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .question {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .answer {
+            font-size: 1.2em;
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Added text shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="quizImage" src="https://i.imgur.com/L7Dc8Li.png" alt="Quiz Image">
+        <div class="qa-box">
+            <div id="question" class="question">Click the image to get a question!</div>
+            <div id="answer" class="answer"></div>
+        </div>
+    </div>
+    
+    <script>
+        const questionsAndAnswers = [
+            { question: "What is the capital of France?", answer: "Paris" },
+            { question: "What is the largest planet in our solar system?", answer: "Jupiter" },
+            { question: "What is the smallest country in the world?", answer: "Vatican City" },
+            { question: "Who wrote 'To Kill a Mockingbird'?", answer: "Harper Lee" },
+            { question: "What is the longest river in the world?", answer: "Nile River" },
+            { question: "What is the hardest natural substance on Earth?", answer: "Diamond" },
+            { question: "What element does 'O' represent on the periodic table?", answer: "Oxygen" },
+            { question: "Who painted the Mona Lisa?", answer: "Leonardo da Vinci" },
+            { question: "What is the chemical symbol for gold?", answer: "Au" },
+            { question: "What is the largest ocean on Earth?", answer: "Pacific Ocean" },
+            { question: "What is the capital of Japan?", answer: "Tokyo" },
+            { question: "What is the name of the largest desert in the world?", answer: "Antarctic Desert" },
+            { question: "What is the tallest mountain in the world?", answer: "Mount Everest" },
+            { question: "Who was the first person to walk on the moon?", answer: "Neil Armstrong" },
+            { question: "What is the capital of Canada?", answer: "Ottawa" },
+            { question: "What is the most spoken language in the world?", answer: "Mandarin" },
+            { question: "Who developed the theory of relativity?", answer: "Albert Einstein" },
+            { question: "What is the name of the galaxy that contains our solar system?", answer: "Milky Way" },
+            { question: "What is the main ingredient in guacamole?", answer: "Avocado" },
+            { question: "Which planet is known as the Red Planet?", answer: "Mars" },
+            { question: "Who wrote 'Pride and Prejudice'?", answer: "Jane Austen" },
+            { question: "What is the chemical symbol for sodium?", answer: "Na" },
+            { question: "What is the largest island in the world?", answer: "Greenland" },
+            { question: "What is the name of the first artificial Earth satellite?", answer: "Sputnik" },
+            { question: "What is the capital of Australia?", answer: "Canberra" },
+            { question: "What is the symbol for potassium on the periodic table?", answer: "K" },
+            { question: "What is the smallest planet in our solar system?", answer: "Mercury" },
+            { question: "What country is known as the Land of the Rising Sun?", answer: "Japan" },
+            { question: "What is the name of the famous clock tower in London?", answer: "Big Ben" },
+            { question: "What is the main language spoken in Brazil?", answer: "Portuguese" },
+            { question: "Who is known as the King of Pop?", answer: "Michael Jackson" },
+            { question: "What is the chemical formula for table salt?", answer: "NaCl" },
+            { question: "What is the name of the largest waterfall in the world?", answer: "Angel Falls" },
+            { question: "Who discovered penicillin?", answer: "Alexander Fleming" },
+            { question: "What is the longest river in South America?", answer: "Amazon River" },
+            { question: "What is the capital of Italy?", answer: "Rome" },
+            { question: "What is the currency of Japan?", answer: "Yen" },
+            { question: "Which planet is known for its rings?", answer: "Saturn" },
+            { question: "What is the chemical symbol for iron?", answer: "Fe" },
+            { question: "What is the capital city of Germany?", answer: "Berlin" },
+            { question: "Who painted 'The Starry Night'?", answer: "Vincent van Gogh" },
+            { question: "What is the largest land animal?", answer: "Elephant" },
+            { question: "Which country is famous for its tulips and windmills?", answer: "Netherlands" },
+            { question: "Who wrote '1984'?", answer: "George Orwell" },
+            { question: "What is the capital of Egypt?", answer: "Cairo" },
+            { question: "What is the name of the largest volcano in the world?", answer: "Mauna Loa" },
+            { question: "What is the most abundant gas in Earth's atmosphere?", answer: "Nitrogen" },
+            { question: "Who is the author of the 'Harry Potter' series?", answer: "J.K. Rowling" },
+            { question: "What is the capital of Spain?", answer: "Madrid" },
+            { question: "What is the name of the famous American statue in New York Harbor?", answer: "Statue of Liberty" },
+            { question: "Which planet is closest to the sun?", answer: "Mercury" },
+            { question: "What is the chemical symbol for carbon?", answer: "C" },
+            { question: "Who wrote 'The Catcher in the Rye'?", answer: "J.D. Salinger" },
+            { question: "What is the smallest bone in the human body?", answer: "Stapes" },
+            { question: "What is the currency of the United Kingdom?", answer: "Pound Sterling" },
+            { question: "What is the name of the longest river in Africa?", answer: "Nile River" },
+            { question: "What is the capital of India?", answer: "New Delhi" },
+            { question: "What is the main ingredient in a traditional Japanese sushi roll?", answer: "Rice" },
+            { question: "What is the chemical symbol for silver?", answer: "Ag" },
+            { question: "What is the capital city of Thailand?", answer: "Bangkok" },
+            { question: "Who was the 16th President of the United States?", answer: "Abraham Lincoln" },
+            { question: "What is the name of the famous bridge in San Francisco?", answer: "Golden Gate Bridge" },
+            { question: "What is the name of the first successful human flight?", answer: "Wright Brothers' Flight" },
+            { question: "What is the name of the artist who sculpted 'David'?", answer: "Michelangelo" },
+            { question: "What is the smallest unit of matter?", answer: "Atom" },
+            { question: "What is the name of the process by which plants make their own food?", answer: "Photosynthesis" },
+            { question: "What is the largest fish in the ocean?", answer: "Whale Shark" },
+            { question: "What is the capital of Sweden?", answer: "Stockholm" },
+            { question: "What is the name of the famous physicist who developed the laws of motion?", answer: "Isaac Newton" },
+            { question: "What is the name of the ancient Egyptian writing system?", answer: "Hieroglyphics" },
+            { question: "What is the tallest building in the world?", answer: "Burj Khalifa" },
+            { question: "What is the chemical symbol for helium?", answer: "He" },
+            { question: "What is the most populous country in the world?", answer: "China" },
+            { question: "Who is known as the Father of Modern Physics?", answer: "Albert Einstein" },
+            { question: "What is the currency of Australia?", answer: "Australian Dollar" }
+        ];
+
+        document.getElementById('quizImage').addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            const question = questionsAndAnswers[randomIndex].question;
+            const answer = questionsAndAnswers[randomIndex].answer;
+
+            document.getElementById('question').textContent = question;
+            document.getElementById('answer').textContent = answer;
+        });
+    </script>
+</body>
+</html>
